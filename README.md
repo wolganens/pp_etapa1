@@ -12,4 +12,4 @@ Para executar o programa basta executar o programa ./escalonador com os seguinte
 
 * **Amanda Oliveira** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 * **Paloma Ribeiro** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Wolgan Ens** - *ens.wolgan@gmail.com* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Wolgan Ens** - *Initial work* - 
