@@ -4,8 +4,8 @@
 
 Para executar o programa basta executar o programa ./escalonador com os seguintes parâmetros:
 
-* **-e ** arquivo de entrada
-* **-p ** politica de escalonamento: fcfs, sjf, rr.
+* **-e** arquivo de entrada
+* **-p** politica de escalonamento: fcfs, sjf, rr.
 
 
 ## Autores
