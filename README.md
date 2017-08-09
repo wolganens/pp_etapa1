@@ -2,5 +2,5 @@
 
 # Grupo
 Amanda Baptista
-Paloma
+Paloma Ribeiro
 Wolgan Ens
