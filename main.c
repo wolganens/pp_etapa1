@@ -18,6 +18,8 @@ int main(int argc, char const *argv[])
 		} else if (strcmp(argv[i], "-p") == 0) {
 			politica = malloc(strlen(argv[i]) * sizeof(char));
 			strcpy(politica,argv[i] + 1);
+		} else {
+			printf("Parâmetros incorretos. Verifique se você informou o arquivo de entrada (-e) e a política desejada (-p)\n");
 		}
 	}	
 	entrada = fopen(arquivo, "r");
