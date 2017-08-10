@@ -18,4 +18,5 @@ Exemplo:
 
 * **Amanda Oliveira** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
 * **Paloma Ribeiro** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Willian Soares** - *Initial work* - 
 * **Wolgan Ens** - *Initial work* - 
