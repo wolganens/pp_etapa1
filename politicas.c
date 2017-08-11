@@ -29,9 +29,9 @@ void fcfs(FILE *entrada) {
 	int id = 0, chegada, duracao;
 	proc *cabeca_lista = cria_lista();
 	do{
-		fscanf(entrada, "%d %d", &chegada,&duracao);		
+		fscanf(entrada, "%d %d\n", &chegada,&duracao);		
 		insere_ordenado_chegada(&cabeca_lista,id,chegada,duracao);
-		id++;		
+		id++;	
 	}while(!feof(entrada));
 
 	escreve_log_saida_fcfs(cabeca_lista);
