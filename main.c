@@ -28,8 +28,7 @@ int main(int argc, char const *argv[])
 	}	
 	if (strcmp("fcfs", politica) == 0) {		
 		fcfs(entrada);
-	} else if(strcmp("sjf", politica) == 0) {
-		sjf(entrada);
+	} else if(strcmp("sjf", politica) == 0) {		
 	} else if(strcmp("rr", politica) == 0){
 	}
 	

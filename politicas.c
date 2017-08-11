@@ -2,18 +2,6 @@
 #include "politicas.h"
 #include "estruturas.c"
 
-void fcfs(FILE *entrada) {
-	int id = 0, chegada, duracao;
-	proc *cabeca_lista = cria_lista();
-	do{
-		fscanf(entrada, "%d %d", &chegada,&duracao);		
-		insere_ordenado_chegada(&cabeca_lista,id,chegada,duracao);
-		id++;		
-	}while(!feof(entrada));
-
-	escreve_log_saida_fcfs(cabeca_lista);
-	destroi_lista(cabeca_lista);	
-}
 void escreve_log_saida_fcfs(proc* cabeca_lista) {
 	char buff[50], pasta_logs[80];	
     struct tm *sTm;
@@ -27,7 +15,7 @@ void escreve_log_saida_fcfs(proc* cabeca_lista) {
     saida = fopen(strcat(pasta_logs, strcat(buff, "-fcfs.log")),"w");
 
     while(cabeca_lista != NULL) {
-    	for ( i = 1 ; i < cabeca_lista->duracao ; i++) {
+    	for ( i = 1 ; i <=	 cabeca_lista->duracao ; i++) {
     		fprintf(saida, "Processo %d ocupou a cpu no ciclo %d\n", cabeca_lista->id, ciclo);
     		ciclo++;
     	}
@@ -35,4 +23,17 @@ void escreve_log_saida_fcfs(proc* cabeca_lista) {
     	cabeca_lista = cabeca_lista->proximo;
     }
     fclose(saida);
+}
+
+void fcfs(FILE *entrada) {
+	int id = 0, chegada, duracao;
+	proc *cabeca_lista = cria_lista();
+	do{
+		fscanf(entrada, "%d %d", &chegada,&duracao);		
+		insere_ordenado_chegada(&cabeca_lista,id,chegada,duracao);
+		id++;		
+	}while(!feof(entrada));
+
+	escreve_log_saida_fcfs(cabeca_lista);
+	destroi_lista(cabeca_lista);	
 }
