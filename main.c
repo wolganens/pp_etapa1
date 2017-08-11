@@ -12,7 +12,7 @@ int main(int argc, char const *argv[])
 		printf("Especifique o arquivo de entrada e a política desejada.\nEx: ./escalonador -e entrada.txt -p fcfs \n");
 		exit(1);
 	}
-	for ( i = 1 ; i < argc ; i++) {		
+	for ( i = 1 ; i < argc ; i++) {
 		if (strcmp(argv[i], "-e") == 0) {
 			arquivo = malloc(strlen(argv[i] + 1) * sizeof(char));
 			strcpy(arquivo,argv[i + 1]);
@@ -20,7 +20,7 @@ int main(int argc, char const *argv[])
 			politica = malloc(strlen(argv[i] + 1) * sizeof(char));
 			strcpy(politica,argv[i + 1]);
 		}
-	}	
+	}
 	entrada = fopen(arquivo, "r");
 	if (entrada == NULL) {
 		printf("Impossível abrir o arquivo\n");
@@ -29,6 +29,7 @@ int main(int argc, char const *argv[])
 	if (strcmp("fcfs", politica) == 0) {		
 		fcfs(entrada);
 	} else if(strcmp("sjf", politica) == 0) {
+		sjf(entrada);
 	} else if(strcmp("rr", politica) == 0){
 	}
 	

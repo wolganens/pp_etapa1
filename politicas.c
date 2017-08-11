@@ -11,10 +11,10 @@ void fcfs(FILE *entrada) {
 		id++;		
 	}while(!feof(entrada));
 
-	escreve_log_saida(cabeca_lista);
+	escreve_log_saida_fcfs(cabeca_lista);
 	destroi_lista(cabeca_lista);	
 }
-void escreve_log_saida(proc* cabeca_lista) {
+void escreve_log_saida_fcfs(proc* cabeca_lista) {
 	char buff[50], pasta_logs[80];	
     struct tm *sTm;
     time_t now = time (0);
