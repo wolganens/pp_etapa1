@@ -24,6 +24,7 @@ void escreve_log_saida_fcfs(proc* cabeca_lista) {
     fclose(saida);
 }
 void escreve_log_saida_sjf(proc* cabeca_lista) {
+    proc *corrente;
     char buff[50], pasta_logs[80];
     struct tm *sTm;
     time_t now = time (0);
@@ -36,13 +37,13 @@ void escreve_log_saida_sjf(proc* cabeca_lista) {
     saida = fopen(strcat(pasta_logs, strcat(buff, "-fcfs.log")),"w");
 
     do{
-        cabeca_lista = menor_duracao(&cabeca_lista);
-        fprintf(saida, "%c%d ", cabeca_lista->id, cabeca_lista->ciclos);
-        cabeca_lista->duracao = cabeca_lista->duracao--;
-        if(cabeca_lista->duracao == 0){
-            remove_pelo_id(&cabeca_lista, cabeca_lista->id);
+        corrente = menor_duracao(cabeca_lista);
+        fprintf(saida, "%c%d ", corrente->id, corrente->ciclos);
+        corrente->duracao = corrente->duracao--;
+        if(corrente->duracao == 0){
+            remove_pelo_id(&cabeca_lista, corrente->id);
         }
-    }while(!vazia(&cabeca_lista));
+    }while(!vazia(cabeca_lista));
     fclose(saida);
 }
 void fcfs(FILE *entrada) {

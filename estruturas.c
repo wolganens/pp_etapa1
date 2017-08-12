@@ -3,6 +3,18 @@
 proc* cria_lista(){	
 	return NULL;
 }
+int vazia(proc* lista){
+	return lista == NULL;
+}
+proc* menor_duracao(proc* lista) {
+	proc* menor = lista;
+	do{
+		lista = lista->proximo;
+		if(lista->duracao < menor->duracao) {
+			menor = lista;
+		}
+	}while(lista != NULL);
+}
 void destroi_lista(proc* lista) {
 	proc* aux;
 	while(lista != NULL) {
