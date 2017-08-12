@@ -6,6 +6,23 @@ proc* cria_lista(){
 int vazia(proc* lista){
 	return lista == NULL;
 }
+void remove_pelo_id(proc* lista, char id){
+	proc* aux;
+	if (vazia(lista)){
+		printf("Lista Vazia");
+		return;
+	}
+	while (lista != NULL && lista->id != id){
+		aux = lista;
+		lista = lista->proximo;
+	}
+	if (vazia(lista)){
+		printf("Processo nao encontrado");
+		return;
+	}
+	aux->proximo = lista->proximo;
+	free (lista);
+}
 proc* menor_duracao(proc* lista) {
 	proc* menor = lista;
 	do{
