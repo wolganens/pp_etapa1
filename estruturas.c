@@ -11,7 +11,7 @@ void destroi_lista(proc* lista) {
 		free(aux);
 	}
 }
-void insere_ordenado_chegada(proc **lista, int id, int chegada, int duracao){	
+void insere_ordenado_chegada(proc **lista, char id, int chegada, int duracao){	
 	proc** percorrer = lista;
 	proc* anterior = NULL;
 	proc* aux = *lista;
