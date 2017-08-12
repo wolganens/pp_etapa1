@@ -1,6 +1,6 @@
 struct processo{
 	char id;
-	int chegada,duracao;
+	int chegada,duracao,ciclos;
 	struct processo *proximo;
 };
 typedef struct processo proc;

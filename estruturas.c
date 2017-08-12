@@ -24,6 +24,7 @@ void insere_ordenado_chegada(proc **lista, char id, int chegada, int duracao){
 	novo->chegada = chegada;
 	novo->proximo = NULL;
 	novo->duracao = duracao;
+	novo->ciclos = 0;
 	// Se a lista estivar vazia, o lemento novo é o começo da lista
 	if (!*lista) {
 		*lista = novo;
@@ -41,6 +42,50 @@ void insere_ordenado_chegada(proc **lista, char id, int chegada, int duracao){
 			*lista = novo;
 		} else {
 			// Se chegou no final da lista, ou seja o novo processo chegou por último
+			// apenas insere ele no final
+			if (*percorrer == NULL) {
+				anterior->proximo = novo;
+			} else {
+				// Caso contrário, insere o novo processo no meio da lista na posição adequada
+				anterior->proximo = novo;
+				novo->proximo = *percorrer;
+			}
+			//Mantem o começo da lista apontando para o primeiro elemento (aux);
+			*lista = aux;
+		}
+	}
+}
+void insere_ordenado_duracao(proc **lista, char id, int chegada, int duracao){	
+	proc** percorrer = lista;
+	proc* anterior = NULL;
+	proc* aux = *lista;
+	proc* novo = malloc(sizeof(proc));
+	if (!novo) {
+		
+		exit(1);
+	}
+	novo->id = id;
+	novo->chegada = chegada;
+	novo->proximo = NULL;
+	novo->duracao = duracao;
+	novo->ciclos = 0;
+	// Se a lista estivar vazia, o lemento novo é o começo da lista
+	if (!*lista) {
+		*lista = novo;
+	} else {
+		// Percorre a lista até encontrar a posição do novo processo
+		while(*percorrer != NULL && (*percorrer)->duracao < novo->duracao){
+			anterior = *percorrer;
+			*percorrer = (*percorrer)->proximo;
+		}
+		// Se não ouver nenhum anterior é porque o novo processo tem duracao menor que o primeiro
+		// elemento e deve ser inserido no inicio da lista
+		if (anterior == NULL) {
+			aux = *percorrer;			
+			novo->proximo = aux;
+			*lista = novo;
+		} else {
+			// Se chegou no final da lista, ou seja o novo processo é mais longo
 			// apenas insere ele no final
 			if (*percorrer == NULL) {
 				anterior->proximo = novo;
