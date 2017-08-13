@@ -2,6 +2,8 @@
 #include "politicas.h"
 #include "estruturas.c"
 
+#define quantum 2
+
 char* gera_nome_log() {
 	char buff[50], pasta_logs[80];
     struct tm *sTm;
