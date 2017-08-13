@@ -25,7 +25,8 @@ int main(int argc, char const *argv[])
 		fcfs(arquivo);
 	} else if(strcmp("sjf", politica) == 0) {
 		sjf(arquivo);
-	} else if(strcmp("rr", politica) == 0){
+	} else if(strcmp("rr", politica) == 0){		
+		rr(arquivo);
 	}
 	return 0;
 }

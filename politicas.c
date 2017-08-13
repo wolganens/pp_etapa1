@@ -29,8 +29,28 @@ void escreve_log_saida_sjf(proc* processo) {
     fprintf(saida, "%c%d ", processo->id, processo->ciclos);
     fclose(saida);
 }
+void rr(char* arquivo) {    
+    proc* processos = carrega_dados_lista(arquivo, 1);    
+    proc* corrente = processos;
+    int i;
+    printf("%c\n", processos->id);
+    
+    // while(restam_processos(&processos)) {
+    //     if (corrente->duracao == 0) {            
+    //         remove_pelo_id(&processos, corrente->id);
+    //     } else {
+    //         for (i = 0 ; i < quantum ; i++) {
+    //             corrente->duracao = (corrente->duracao - 1);
+    //             corrente->ciclos = (corrente->ciclos + 1);
+    //             escreve_log_saida_sjf(corrente);            
+    //         }        
+    //     }
+    //     corrente = corrente->proximo;
+    // }
+    //destroi_lista(processos);
+}
 void fcfs(char* arquivo) {
-	proc* processos = carrega_dados_lista(arquivo);
+	proc* processos = carrega_dados_lista(arquivo, 0);
     int i;
     
     while(processos != NULL) {
@@ -42,7 +62,7 @@ void fcfs(char* arquivo) {
     destroi_lista(processos);
 }
 void sjf(char* arquivo) {
-    proc* processos = carrega_dados_lista(arquivo);    
+    proc* processos = carrega_dados_lista(arquivo, 0);
     proc* corrente;    
     int ciclo_atual = processos->chegada, ciclo = 1;        
 
@@ -59,7 +79,7 @@ void sjf(char* arquivo) {
     }    
     destroi_lista(processos);    
 }
-proc* carrega_dados_lista(char* arquivo){
+proc* carrega_dados_lista(char* arquivo, int circular){
     int chegada, duracao;
     char id;
     proc *processos = cria_lista();
@@ -71,8 +91,12 @@ proc* carrega_dados_lista(char* arquivo){
         exit(1);
     }
     do{
-        fscanf(entrada, "%c %d %d\n", &id, &chegada, &duracao);        
-        insere_ordenado_chegada(&processos,id,chegada,duracao);        
+        fscanf(entrada, "%c %d %d\n", &id, &chegada, &duracao);
+        if(circular) {            
+            insere_ordenado_chegada_circular(&processos,id,chegada,duracao);
+        } else {
+            insere_ordenado_chegada(&processos,id,chegada,duracao);
+        }
     }while(!feof(entrada));
 
     fclose(entrada);

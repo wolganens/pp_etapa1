@@ -103,6 +103,26 @@ void insere_ordenado_chegada(proc **lista, char id, int chegada, int duracao){
 		}
 	}
 }
+void insere_ordenado_chegada_circular(proc **lista, char id, int chegada, int duracao){	
+	proc** percorrer = lista;
+	proc* anterior = NULL;
+	proc* aux = *lista;
+	proc* novo = malloc(sizeof(proc));	
+	if (!novo) {	
+		exit(1);
+	}
+	novo->id = id;
+	novo->chegada = chegada;
+	novo->proximo = NULL;
+	novo->duracao = duracao;
+	novo->ciclos = 0;
+	// Se a lista estivar vazia, o lemento novo é o começo da lista
+	if (!*lista) {		
+		*lista = novo;
+		(*lista)->proximo = *lista;		
+	
+	}	
+}
 int restam_processos(proc** lista) {
 	int restam = 0;
 	proc* inicio = *lista;
@@ -110,7 +130,7 @@ int restam_processos(proc** lista) {
 
 	while(*percorrer != NULL) {		
 		if ((*percorrer)->duracao > 0) {
-			restam = 1;
+			restam = 1;			
 		}
 		*percorrer = (*percorrer)->proximo;
 	}
