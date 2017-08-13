@@ -1,3 +1,3 @@
 void fcfs(char* arquivo);
 void sjf(char* arquivo);
-void rr();
+void rr(char* arquivo, int quantum);

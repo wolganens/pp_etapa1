@@ -2,8 +2,6 @@
 #include "politicas.h"
 #include "estruturas.c"
 
-#define quantum 2
-
 char* gera_nome_log() {
 	char buff[50], pasta_logs[80];
     struct tm *sTm;
@@ -26,7 +24,7 @@ void executa_processo(proc* processo) {
     processo->ciclos = (processo->ciclos + 1);
     escreve_log_saida(processo);
 }
-void rr(char* arquivo) {    
+void rr(char* arquivo, int quantum) {    
     proc* processos = carrega_dados_lista(arquivo, 1);    
     proc* corrente = processos;
     int i;    

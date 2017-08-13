@@ -6,6 +6,7 @@ Para executar o programa basta digitar no terminal ./escalonador com os parâmet
 
 * **-e** arquivo de entrada
 * **-p** politica de escalonamento: fcfs, sjf, rr.
+* **-q** tamanho do quantum para a política rr.
 
 Exemplo:
 
@@ -13,10 +14,16 @@ Exemplo:
 ./escalonador -e entrada.txt -p fcfs
 ```
 
+Exemplo 2:
+
+```
+./escalonador -e entrada.txt -p rr -q 4
+```
+
 
 ## Autores
 
-* **Amanda Oliveira** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Paloma Ribeiro** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-* **Willian Soares** - *Initial work* - 
-* **Wolgan Ens** - *Initial work* - 
+* **Amanda Oliveira**
+* **Paloma Ribeiro**
+* **Willian Soares**
+* **Wolgan Ens**
