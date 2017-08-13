@@ -2,71 +2,77 @@
 #include "politicas.h"
 #include "estruturas.c"
 
-void escreve_log_saida_fcfs(proc* cabeca_lista) {
+char* gera_nome_log() {
 	char buff[50], pasta_logs[80];
     struct tm *sTm;
-    time_t now = time (0);
-    int i;
-    FILE *saida;
-
+    time_t now = time (0);    
     sTm = gmtime (&now);
 	strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
 	strcpy(pasta_logs, "./logs/");
-    saida = fopen(strcat(pasta_logs, strcat(buff, "-fcfs.log")),"w");
-
-    while(cabeca_lista != NULL) {
-    	for ( i = 1 ; i <= cabeca_lista->duracao ; i++) {
-    		fprintf(saida, "%c%d ", cabeca_lista->id, i);
-    	}
-    	fprintf(saida, "\n");
-    	cabeca_lista = cabeca_lista->proximo;
-    }
-    fclose(saida);
+    return strcat(pasta_logs, buff);
 }
-void escreve_log_saida_sjf(proc* cabeca_lista) {
-    proc *corrente;
-    char buff[50], pasta_logs[80];
-    struct tm *sTm;
-    time_t now = time (0);
-    int i;
+void escreve_log_saida_fcfs(proc* processo, int ciclo) {
     FILE *saida;
-
-    sTm = gmtime (&now);
-    strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
-    strcpy(pasta_logs, "./logs/");
-    saida = fopen(strcat(pasta_logs, strcat(buff, "-fcfs.log")),"w");
-
-    do{
-        corrente = menor_duracao(cabeca_lista);
-        fprintf(saida, "%c%d ", corrente->id, corrente->ciclos);
-        corrente->duracao = corrente->duracao--;
-        if(corrente->duracao == 0){
-            remove_pelo_id(&cabeca_lista, corrente->id);
-        }
-    }while(!vazia(cabeca_lista));
+    char pasta_logs[80];
+    strcpy(pasta_logs,gera_nome_log());
+    saida = fopen(pasta_logs,"a+");    
+	fprintf(saida, "%c%d ", processo->id, ciclo);    	    		
     fclose(saida);
 }
-void fcfs(FILE *entrada) {
-	int chegada, duracao;
-    char id;
-	proc *cabeca_lista = cria_lista();
-	do{
-		fscanf(entrada, "%c %d %d\n", &id, &chegada, &duracao);
-		insere_ordenado_chegada(&cabeca_lista,id,chegada,duracao);
-	}while(!feof(entrada));
-
-	escreve_log_saida_fcfs(cabeca_lista);
-	destroi_lista(cabeca_lista);
+void escreve_log_saida_sjf(proc* processo) {
+    FILE *saida;
+    char pasta_logs[80];
+    strcpy(pasta_logs, gera_nome_log());
+    saida = fopen(pasta_logs, "a+");
+    fprintf(saida, "%c%d ", processo->id, processo->ciclos);
+    fclose(saida);
 }
-void sjf(FILE *entrada) {
+void fcfs(char* arquivo) {
+	proc* processos = carrega_dados_lista(arquivo);
+    int i;
+    
+    while(processos != NULL) {
+        for (i = 0 ; i < processos->duracao ; i++) {
+            escreve_log_saida_fcfs(processos,i);
+        }
+        processos = processos->proximo;
+    }
+    destroi_lista(processos);
+}
+void sjf(char* arquivo) {
+    proc* processos = carrega_dados_lista(arquivo);    
+    proc* corrente;    
+    int ciclo_atual = processos->chegada, ciclo = 1;        
+
+    while(restam_processos(&processos)) {        
+        corrente = busca_processo_ciclo(&processos, ciclo_atual);        
+        if (corrente->duracao == 0) {            
+            remove_pelo_id(&processos, corrente->id);
+        } else {
+            corrente->duracao = (corrente->duracao - 1);
+            corrente->ciclos = (corrente->ciclos + 1);
+            escreve_log_saida_sjf(corrente);            
+        }        
+        ciclo_atual++;
+    }    
+    destroi_lista(processos);    
+}
+proc* carrega_dados_lista(char* arquivo){
     int chegada, duracao;
     char id;
-    proc *cabeca_lista = cria_lista();
+    proc *processos = cria_lista();
+
+    FILE* entrada = fopen(arquivo, "r");
+
+    if (entrada == NULL) {
+        printf("Impossível abrir o arquivo\n");
+        exit(1);
+    }
     do{
-        fscanf(entrada, "%c %d %d\n", &id, &chegada, &duracao);
-        insere_ordenado_duracao(&cabeca_lista,id,chegada,duracao);
+        fscanf(entrada, "%c %d %d\n", &id, &chegada, &duracao);        
+        insere_ordenado_chegada(&processos,id,chegada,duracao);        
     }while(!feof(entrada));
 
-    escreve_log_saida_sjf(cabeca_lista);
-    destroi_lista(cabeca_lista);
+    fclose(entrada);
+    return processos;
 }

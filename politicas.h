@@ -1,3 +1,3 @@
-void fcfs(FILE *entrada);
-void sjf(FILE *entrada);
+void fcfs(char* arquivo);
+void sjf(char* arquivo);
 void rr();

@@ -4,8 +4,7 @@
 #include "politicas.c"
 
 int main(int argc, char const *argv[])
-{
-	FILE *entrada;
+{	
 	int i;
 	char *arquivo, *politica;
 	if (argc < 5) {
@@ -21,17 +20,12 @@ int main(int argc, char const *argv[])
 			strcpy(politica,argv[i + 1]);
 		}
 	}
-	entrada = fopen(arquivo, "r");
-	if (entrada == NULL) {
-		printf("Impossível abrir o arquivo\n");
-		exit(1);
-	}	
+	
 	if (strcmp("fcfs", politica) == 0) {		
-		fcfs(entrada);
-	} else if(strcmp("sjf", politica) == 0) {		
+		fcfs(arquivo);
+	} else if(strcmp("sjf", politica) == 0) {
+		sjf(arquivo);
 	} else if(strcmp("rr", politica) == 0){
 	}
-	
-	fclose(entrada);
 	return 0;
 }
