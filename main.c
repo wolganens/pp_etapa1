@@ -20,9 +20,7 @@ int main(int argc, char const *argv[])
 			politica = malloc(strlen(argv[i] + 1) * sizeof(char));
 			strcpy(politica,argv[i + 1]);
 		} else if (strcmp(argv[i], "-q") == 0) {
-			quantum = atoi(argv[i + 1]);
-			printf("%d\n", quantum);		
-			getchar();
+			quantum = atoi(argv[i + 1]);			
 		}
 	}
 	

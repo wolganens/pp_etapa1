@@ -1,6 +1,7 @@
 #include <time.h>
 #include "politicas.h"
 #include "estruturas.c"
+#include "html.c"
 
 char* gera_nome_log() {
 	char buff[50], pasta_logs[80];
@@ -18,6 +19,7 @@ void escreve_log_saida(proc* processo) {
     saida = fopen(pasta_logs, "a+");
     fprintf(saida, "%c%d ", processo->id, processo->ciclos);
     fclose(saida);
+    escreve_json(pasta_logs);
 }
 void executa_processo(proc* processo) {
     processo->duracao = (processo->duracao - 1);
