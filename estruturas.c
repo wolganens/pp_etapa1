@@ -54,11 +54,19 @@ proc* menor_duracao(proc** lista) {
 }
 void destroi_lista(proc* lista) {
 	proc* aux;
-	while(lista != NULL) {
+	while(lista != NULL) {		
 		aux = lista;
 		lista = lista->proximo;
 		free(aux);
 	}
+}
+void destroi_lista_circular(proc** lista) {
+	proc* aux = (*lista);
+	proc* remover;	
+	while (aux->proximo != (*lista)) {		
+		aux = aux->proximo;		
+	}
+	free(aux);
 }
 void insere_ordenado_chegada(proc **lista, char id, int chegada, int duracao){	
 	proc** percorrer = lista;
@@ -103,32 +111,49 @@ void insere_ordenado_chegada(proc **lista, char id, int chegada, int duracao){
 		}
 	}
 }
-void insere_ordenado_chegada_circular(proc **lista, char id, int chegada, int duracao){	
-	proc** percorrer = lista;
-	proc* anterior = NULL;
-	proc* aux = *lista;
-	proc* novo = malloc(sizeof(proc));	
-	if (!novo) {	
+proc* novo_processo(char id, int chegada, int duracao){
+	proc* novo = malloc(sizeof(proc));
+	if (novo == NULL) {
+		printf("Falha ao alocar memória para o processo\n");
 		exit(1);
 	}
 	novo->id = id;
 	novo->chegada = chegada;
-	novo->proximo = NULL;
 	novo->duracao = duracao;
-	novo->ciclos = 0;
-	// Se a lista estivar vazia, o lemento novo é o começo da lista
-	if (!*lista) {		
+	return novo;
+}
+void insere_ordenado_chegada_circular(proc **lista, char id, int chegada, int duracao){	
+	proc* novo = novo_processo(id, chegada, duracao);
+	proc* anterior = NULL;
+	if ((*lista) == NULL) {
 		*lista = novo;
-		(*lista)->proximo = *lista;		
-	
+		novo->proximo = novo;
+	} else {
+		proc* aux = (*lista);
+		while(aux->proximo != (*lista) && aux->chegada < novo->chegada){
+			anterior = aux;
+			aux = aux->proximo;
+		}
+		if (anterior == NULL) {
+			if (novo->chegada > aux->chegada) {
+				aux->proximo = novo;
+				novo->proximo = aux;
+			} else {
+				(*lista) = novo;
+				novo->proximo = aux;
+				aux->proximo = novo;				
+			}
+		} else {
+			aux->proximo = novo;
+			novo->proximo = (*lista);
+		}
 	}	
 }
 int restam_processos(proc** lista) {
 	int restam = 0;
 	proc* inicio = *lista;
-	proc** percorrer = lista;
-
-	while(*percorrer != NULL) {		
+	proc** percorrer = lista;			
+	while(*percorrer != NULL && (*percorrer)->proximo != inicio) {
 		if ((*percorrer)->duracao > 0) {
 			restam = 1;			
 		}

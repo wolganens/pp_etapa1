@@ -29,25 +29,28 @@ void escreve_log_saida_sjf(proc* processo) {
     fprintf(saida, "%c%d ", processo->id, processo->ciclos);
     fclose(saida);
 }
+void executa_processo(proc* processo) {
+    processo->duracao = (processo->duracao - 1);
+    processo->ciclos = (processo->ciclos + 1);
+    escreve_log_saida_sjf(processo);
+}
 void rr(char* arquivo) {    
     proc* processos = carrega_dados_lista(arquivo, 1);    
     proc* corrente = processos;
-    int i;
-    printf("%c\n", processos->id);
-    
-    // while(restam_processos(&processos)) {
-    //     if (corrente->duracao == 0) {            
-    //         remove_pelo_id(&processos, corrente->id);
-    //     } else {
-    //         for (i = 0 ; i < quantum ; i++) {
-    //             corrente->duracao = (corrente->duracao - 1);
-    //             corrente->ciclos = (corrente->ciclos + 1);
-    //             escreve_log_saida_sjf(corrente);            
-    //         }        
-    //     }
-    //     corrente = corrente->proximo;
-    // }
-    //destroi_lista(processos);
+    int i;    
+    while(restam_processos(&processos)) {
+        if(corrente->duracao >= quantum) {
+            for (i = 0 ; i < quantum ; i++) {
+                executa_processo(corrente);
+            } 
+        }else {
+            for (i = 0 ; i < corrente->duracao ; i++){
+                executa_processo(corrente);
+            }
+        }
+        corrente = corrente->proximo;
+    }
+    destroi_lista_circular(&processos);
 }
 void fcfs(char* arquivo) {
 	proc* processos = carrega_dados_lista(arquivo, 0);
