@@ -13,15 +13,7 @@ char* gera_nome_log() {
 	strcpy(pasta_logs, "./logs/");
     return strcat(pasta_logs, buff);
 }
-void escreve_log_saida_fcfs(proc* processo, int ciclo) {
-    FILE *saida;
-    char pasta_logs[80];
-    strcpy(pasta_logs,gera_nome_log());
-    saida = fopen(pasta_logs,"a+");    
-	fprintf(saida, "%c%d ", processo->id, ciclo);    	    		
-    fclose(saida);
-}
-void escreve_log_saida_sjf(proc* processo) {
+void escreve_log_saida(proc* processo) {
     FILE *saida;
     char pasta_logs[80];
     strcpy(pasta_logs, gera_nome_log());
@@ -32,7 +24,7 @@ void escreve_log_saida_sjf(proc* processo) {
 void executa_processo(proc* processo) {
     processo->duracao = (processo->duracao - 1);
     processo->ciclos = (processo->ciclos + 1);
-    escreve_log_saida_sjf(processo);
+    escreve_log_saida(processo);
 }
 void rr(char* arquivo) {    
     proc* processos = carrega_dados_lista(arquivo, 1);    
@@ -53,30 +45,30 @@ void rr(char* arquivo) {
     destroi_lista_circular(&processos);
 }
 void fcfs(char* arquivo) {
-	proc* processos = carrega_dados_lista(arquivo, 0);
-    int i;
-    
-    while(processos != NULL) {
-        for (i = 0 ; i < processos->duracao ; i++) {
-            escreve_log_saida_fcfs(processos,i);
+	proc* processos = carrega_dados_lista(arquivo, 0);    
+    proc* corrente = processos;
+    int id;
+    while(restam_processos(&processos)) {        
+        while(corrente->duracao > 0) {
+            executa_processo(corrente);
         }
-        processos = processos->proximo;
-    }
+        id = corrente->id;
+        corrente = corrente->proximo;
+        remove_pelo_id(&processos, id);
+    }    
     destroi_lista(processos);
 }
 void sjf(char* arquivo) {
     proc* processos = carrega_dados_lista(arquivo, 0);
     proc* corrente;    
-    int ciclo_atual = processos->chegada, ciclo = 1;        
+    int ciclo_atual = processos->chegada;
 
     while(restam_processos(&processos)) {        
-        corrente = busca_processo_ciclo(&processos, ciclo_atual);        
+        corrente = busca_processo_ciclo(&processos, ciclo_atual);
         if (corrente->duracao == 0) {            
             remove_pelo_id(&processos, corrente->id);
         } else {
-            corrente->duracao = (corrente->duracao - 1);
-            corrente->ciclos = (corrente->ciclos + 1);
-            escreve_log_saida_sjf(corrente);            
+            executa_processo(corrente);            
         }        
         ciclo_atual++;
     }    
