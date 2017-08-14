@@ -18,8 +18,7 @@ void escreve_log_saida(proc* processo) {
     strcpy(pasta_logs, gera_nome_log());
     saida = fopen(pasta_logs, "a+");
     fprintf(saida, "%c%d ", processo->id, processo->ciclos);
-    fclose(saida);
-    escreve_json(pasta_logs);
+    fclose(saida);    
 }
 void executa_processo(proc* processo) {
     processo->duracao = (processo->duracao - 1);
