@@ -1,29 +1,23 @@
 #include <time.h>
 #include "politicas.h"
 #include "estruturas.c"
-#include "html.c"
+#include "logs.c"
 
-char* gera_nome_log() {
-	char buff[50], pasta_logs[80];
-    struct tm *sTm;
-    time_t now = time (0);    
-    sTm = gmtime (&now);
-	strftime (buff, sizeof(buff), "%Y-%m-%d %H:%M:%S", sTm);
-	strcpy(pasta_logs, "./logs/");
-    return strcat(pasta_logs, buff);
-}
-void escreve_log_saida(proc* processo) {
-    FILE *saida;
-    char pasta_logs[80];
-    strcpy(pasta_logs, gera_nome_log());
-    saida = fopen(pasta_logs, "a+");
-    fprintf(saida, "%c%d ", processo->id, processo->ciclos);
-    fclose(saida);    
+void executa_politica(char* politica, char *arquivo, int quantum) {
+    inicializa_logs();
+    if (strcmp("fcfs", politica) == 0) {        
+        fcfs(arquivo);
+    } else if(strcmp("sjf", politica) == 0) {
+        sjf(arquivo);
+    } else if(strcmp("rr", politica) == 0){     
+        rr(arquivo, quantum);
+    }
+    finaliza_logs();
 }
 void executa_processo(proc* processo) {
     processo->duracao = (processo->duracao - 1);
     processo->ciclos = (processo->ciclos + 1);
-    escreve_log_saida(processo);
+    salva_log_execucao(processo);
 }
 void rr(char* arquivo, int quantum) {    
     proc* processos = carrega_dados_lista(arquivo, 1);    

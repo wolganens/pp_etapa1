@@ -22,13 +22,6 @@ int main(int argc, char const *argv[])
 			quantum = atoi(argv[i + 1]);			
 		}
 	}
-	
-	if (strcmp("fcfs", politica) == 0) {		
-		fcfs(arquivo);
-	} else if(strcmp("sjf", politica) == 0) {
-		sjf(arquivo);
-	} else if(strcmp("rr", politica) == 0){		
-		rr(arquivo, quantum);
-	}
+	executa_politica(politica, arquivo, quantum);	
 	return 0;
 }
