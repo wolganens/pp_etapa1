@@ -18,7 +18,7 @@ Exemplo de execução
 ```
 $ ./escalonador -e entrada.txt -p fcfs
 ```
-### Visualizando a sada do programa
+### Visualizando a saída do programa
 
 Para visualizar a saída do programa, o mesmo conta com dois logs, um arquivo de texto comum com os processos executados, e uma página HTML onde a execução do processo é exibida com maiores detalhes.
 Os arquivos de saída ficam na pasta logs do projeto. Ao abrir um log no formato html, a saída esperada é semelhante a da imagem abaixo:
