@@ -53,9 +53,8 @@ void fcfs(char* arquivo) {
 }
 void sjf(char* arquivo) {
     proc* processos = carrega_dados_lista(arquivo, 0);
-    proc* corrente;    
+    proc* corrente;
     int ciclo_atual = processos->chegada;
-
     while(restam_processos(&processos)) {        
         corrente = busca_processo_ciclo(&processos, ciclo_atual);
         if (corrente->duracao == 0) {            

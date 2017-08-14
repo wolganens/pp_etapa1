@@ -113,6 +113,7 @@ proc* novo_processo(char id, int chegada, int duracao){
 	novo->chegada = chegada;
 	novo->duracao = duracao;
 	novo->ciclos = 0;
+	novo->proximo = NULL;
 	return novo;
 }
 void insere_ordenado_chegada_circular(proc **lista, char id, int chegada, int duracao){	
@@ -149,7 +150,7 @@ int restam_processos(proc** lista) {
 	while(*percorrer != NULL && (*percorrer)->proximo != inicio) {
 		if ((*percorrer)->duracao > 0) {
 			restam = 1;
-		}
+		}		
 		*percorrer = (*percorrer)->proximo;
 	}
 	*lista = inicio;
