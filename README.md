@@ -22,9 +22,9 @@ $ ./escalonador -e entrada.txt -p fcfs
 
 Para visualizar a saída do programa, o mesmo conta com dois logs, um arquivo de texto comum com os processos executados, e uma página HTML onde a execução do processo é exibida com maiores detalhes.
 Os arquivos de saída ficam na pasta logs do projeto. Ao abrir um log no formato html, a saída esperada é semelhante a da imagem abaixo:
-![alt text](https://github.com/wolganens/pp_etapa1/blob/master/loghtml.jpg)
+![alt text](https://github.com/wolganens/pp_etapa1/blob/master/arquivis_web/loghtml.jpg)
 
-## Authors
+## Autores
 
 * **Amanda Oliveira**
 * **Fernando de Oliveira**

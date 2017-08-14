@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "politicas.c"
+#include "codigo/politicas.c"
 
 int main(int argc, char const *argv[])
 {	
