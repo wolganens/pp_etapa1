@@ -15,9 +15,9 @@ void executa_politica(char* politica, char *arquivo, int quantum) {
     finaliza_logs();
 }
 void executa_processo(proc* processo) {
-    processo->duracao = (processo->duracao - 1);
     processo->ciclos = (processo->ciclos + 1);
     salva_log_execucao(processo);
+    processo->duracao = (processo->duracao - 1);
 }
 void rr(char* arquivo, int quantum) {    
     proc* processos = carrega_dados_lista(arquivo, 1);    
@@ -29,8 +29,12 @@ void rr(char* arquivo, int quantum) {
                 executa_processo(corrente);
             } 
         }else {
-            for (i = 0 ; i < corrente->duracao ; i++){
-                executa_processo(corrente);
+            if (corrente->duracao == 0) {
+                remove_pelo_id(&processos, corrente->id);
+            } else {
+                while(corrente->duracao > 0){                    
+                    executa_processo(corrente);
+                }
             }
         }
         corrente = corrente->proximo;
