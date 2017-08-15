@@ -39,18 +39,15 @@ var escalonador = {
 			$(".row").append(escalonador.divs[i]);
 		}
 	},
-	exibe_ciclo_atual(){
-		
-		$(".ciclo").hide();
-		$(".ciclo").addClass('hidden');
-		if (escalonador.ciclo_atual == 0) {
-			$($('.ciclo')[0]).removeClass('hidden').show('fast');
-		} else {
-			for (i = 0; i <= escalonador.ciclo_atual ; i++){
-				console.log($($('.ciclo')[i]));
-				$($('.ciclo')[i]).removeClass('hidden').show('fast');
+	exibe_ciclo_atual(){		
+		$(".ciclo").each(function(index, el) {
+			console.log($(this));
+			if(index > escalonador.ciclo_atual) {
+				$(this).hide('fast');
+			} else {
+				$(this).removeClass('hidden').show('fast');
 			}
-		}		
+		});
 	},
 	eventos(){
 		$("#avanca").click(function(event) {
