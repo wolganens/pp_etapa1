@@ -9,7 +9,7 @@ var escalonador = {
 	setColors: function(){
 		var i;		
 		for (i = 0 ; i < escalonador.proc.length ; i++){
-			escalonador.colors.push(randomColor());
+			escalonador.colors.push(randomColor({luminosity: 'light'}));
 		}		
 	},
 	setProcessos: function(){
