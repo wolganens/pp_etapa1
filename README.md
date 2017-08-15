@@ -5,7 +5,7 @@ Primeiro trabalho da disciplina de práticas em programação da UNIPAMPA, consi
 Para executar o programa, basta em um terminal digar o comando ./escalonador seguido dos parâmetros desejados. Os parâmetros existentes são:
 * **-e** "arquivo_de_entrada", instrui o programa a ler os processos do arquivo de entrada entre aspas (remover aspas durante a execução).
 * **-p** Política de escalonamento desejada, valores válidos: fcfs, sjf e rr.
-* **-q** Para a polícia rr, pode ser especificado o quantum utilizado, caso não informado o valor padrão utilizado é = 2
+* **-q** Para a política rr, pode ser especificado o quantum utilizado, caso não informado o valor padrão utilizado é = 2
 
 Exemplo de execução
 
