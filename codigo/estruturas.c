@@ -162,14 +162,16 @@ proc* busca_processo_ciclo(proc** processos, int ciclo_atual) {
 	proc* processo = NULL;	
 
 	while(*percorrer != NULL) {		
-		if ((*percorrer)->chegada <= ciclo_atual) {			
+		if ((*percorrer)->chegada == ciclo_atual) {
 			if (processo != NULL) {
-				if ((*percorrer)->duracao < processo->duracao) {					
-					processo = *percorrer;
+				if((*percorrer)->duracao < processo->duracao) {
+					processo = (*percorrer);
+				} else {
+					*percorrer = (*percorrer)->proximo;
+					continue;			
 				}
-			} else {				
-				processo = *percorrer;
 			}
+			processo = (*percorrer);
 		}
 		*percorrer = (*percorrer)->proximo;
 	}

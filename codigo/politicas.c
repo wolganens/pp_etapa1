@@ -4,7 +4,7 @@
 #include "logs.c"
 
 void executa_politica(char* politica, char *arquivo, int quantum) {
-    inicializa_logs();
+    inicializa_logs(politica);
     if (strcmp("fcfs", politica) == 0) {        
         fcfs(arquivo);
     } else if(strcmp("sjf", politica) == 0) {
