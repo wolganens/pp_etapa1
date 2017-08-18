@@ -3,38 +3,39 @@
 lista* cria_lista(){
 	return NULL;	
 }
-proc* encontra_processo_ciclo(fila** fila_ptr, lista** processos, int ciclo_atual){
+void cria_fila(fila* f){
+	f->inicio = NULL;
+	f->fim = NULL;
+}
+void encontra_processo_ciclo(fila* fila_ptr, lista** processos, int ciclo_atual){
 	lista* aux = *processos;
 	while(aux != NULL) {
 		if(aux->processo->chegada == ciclo_atual){
-			insere_final(fila_ptr, aux->processo);
+			insere_fila(fila_ptr, aux->processo);
 		}
 		aux = aux->proximo;
 	}
 }
-void pop(fila** fila_ptr){
-	fila* aux = *fila_ptr;
-	*fila_ptr = aux->proximo;
-	free(aux);
-}
-void insere_final(fila** fila_ptr, proc* processo) {
-	fila* no_fila = malloc(sizeof(fila));
-	no_fila->final = NULL;
-	no_fila->processo = processo;
-	no_fila->proximo = NULL;
-	
-	if ((*fila_ptr) == NULL) {
-		(*fila_ptr) = no_fila;
-		(*fila_ptr)->final = no_fila;
-	} else {
-		fila* aux = (*fila_ptr);
-		while(aux->proximo != NULL) {
-			aux->final = no_fila;
-			aux = aux->proximo;
+void remove_fila(fila* fila_ptr){	
+	if(fila_ptr->inicio != NULL){
+		no* inicio = fila_ptr->inicio;
+		if (inicio->proximo != NULL) {
+			fila_ptr->inicio = inicio->proximo;
+			free(inicio);
 		}
-		aux->proximo = no_fila;
-		aux->final = no_fila;
 	}
+}
+void insere_fila(fila* fila_ptr, proc* processo) {
+	no* novo = malloc(sizeof(fila));
+	novo->processo = processo;
+	novo->proximo = NULL;
+
+	if(fila_ptr->fim != NULL){
+		fila_ptr->fim->proximo = novo;
+	} else {
+		fila_ptr->inicio = novo;
+	}
+	fila_ptr->fim = novo;
 }
 void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duracao){	
 	lista** percorrer = lista_ptr;

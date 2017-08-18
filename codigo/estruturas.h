@@ -4,12 +4,19 @@ struct processo{
 };
 typedef struct processo proc;
 
-struct f {
+struct __no {
 	proc* processo;
-	struct f* proximo, *final;
+	struct __no* proximo;
 };
 
-typedef struct f fila;
+typedef struct __no no;
+
+struct __fila
+{
+	no* inicio, *fim;
+};
+
+typedef struct __fila fila;
 
 struct processos
 {
@@ -20,7 +27,9 @@ typedef struct processos lista;
 
 lista* novo_processo(char id, int chegada, int duracao);
 lista* cria_lista();
-proc* encontra_processo_ciclo(fila** fila, lista** processos, int ciclo_atual);
+void cria_fila();
+void insere_fila(fila* fila_ptr, proc* processo);
+void encontra_processo_ciclo(fila* fila_ptr, lista** processos, int ciclo_atual);
 void insere_ordenado_chegada(lista **lista, char id, int chegada, int duracao);
 void insere_final(fila** fila_ptr, proc* processo);
 void pop(fila** fila_ptr);

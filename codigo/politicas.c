@@ -15,15 +15,14 @@ void executa_politica(char* politica, char *arquivo, int quantum) {
     // }
     finaliza_logs();
 }
-void executa_processo(fila** fila_de_execucao, int* n_processos) {
-    fila* inicio_fila = *fila_de_execucao;        
+void executa_processo(fila* fila_de_execucao, int* n_processos) {
+    no* inicio_fila = fila_de_execucao->inicio;        
     
     inicio_fila->processo->ciclos = (inicio_fila->processo->ciclos + 1);    
     salva_log_execucao(inicio_fila->processo);        
     if(inicio_fila->processo->duracao == 0) {        
-        pop(&inicio_fila);  
-        (*n_processos)--;        
-        *fila_de_execucao = inicio_fila;        
+        remove_fila(fila_de_execucao);  
+        (*n_processos)--;                
     } else {
         inicio_fila->processo->duracao = (inicio_fila->processo->duracao - 1);
     }
@@ -52,9 +51,12 @@ void executa_processo(fila** fila_de_execucao, int* n_processos) {
 // }
 void fcfs(char* arquivo) {
     int n_processos = 0, ciclo_atual = 0;
-	lista* processos = carrega_dados_lista(arquivo, 0, &n_processos);
-    fila* fila_de_execucao = NULL;
+    lista* processos = carrega_dados_lista(arquivo, 0, &n_processos);
+    fila fila_de_execucao;
     proc* processo_ciclo_atual = NULL;
+    
+    // Inicializa a fila de execução de processos
+    cria_fila(&fila_de_execucao);
     
     while(n_processos > 0){        
         encontra_processo_ciclo(&fila_de_execucao, &processos, ciclo_atual);
