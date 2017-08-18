@@ -37,6 +37,16 @@ void insere_fila(fila* fila_ptr, proc* processo) {
 	}
 	fila_ptr->fim = novo;
 }
+void destroi_fila(fila* fila_ptr) {
+	no* aux = fila_ptr->inicio;
+	no* prox;
+	while(aux != NULL) {
+		prox = aux->proximo;
+		free(aux->processo);
+		free(aux);
+		aux = prox;
+	}		
+}
 void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duracao){	
 	lista** percorrer = lista_ptr;
 	lista* anterior = NULL;
@@ -70,6 +80,14 @@ void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duraca
 			//Mantem o começo da lista apontando para o primeiro elemento (aux);
 			*lista_ptr = aux;
 		}
+	}
+}
+void destroi_lista(lista* lista_ptr) {
+	lista* aux = NULL;
+	while(lista_ptr != NULL) {		
+		aux = lista_ptr;
+		lista_ptr = lista_ptr->proximo;		
+		free(aux);
 	}
 }
 // int vazia(proc** lista){
@@ -120,14 +138,6 @@ void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duraca
 // 	}
 // 	*lista = aux;
 // 	return menor;
-// }
-// void destroi_lista(proc* lista) {
-// 	proc* aux;
-// 	while(lista != NULL) {		
-// 		aux = lista;
-// 		lista = lista->proximo;
-// 		free(aux);
-// 	}
 // }
 // void destroi_lista_circular(proc** lista) {
 // 	proc* aux = (*lista);

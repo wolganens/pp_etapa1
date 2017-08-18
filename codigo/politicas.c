@@ -64,8 +64,8 @@ void fcfs(char* arquivo) {
         ciclo_atual++;
     }    
     
-    // destroi_lista(processos);
-    // destroi_lista(fila_de_execucao);
+    destroi_lista(processos);
+    destroi_fila(&fila_de_execucao);
 }
 // void sjf(char* arquivo) {
 //     proc* processos = carrega_dados_lista(arquivo, 0);
