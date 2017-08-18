@@ -67,21 +67,24 @@ void fcfs(char* arquivo) {
     destroi_lista(processos);
     destroi_fila(&fila_de_execucao);
 }
-// void sjf(char* arquivo) {
-//     proc* processos = carrega_dados_lista(arquivo, 0);
-//     proc* corrente;
-//     int ciclo_atual = processos->chegada;
-//     while(restam_processos(&processos)) {        
-//         corrente = busca_processo_ciclo(&processos, ciclo_atual);
-//         if (corrente->duracao == 0) {
-//             remove_pelo_id(&processos, corrente->id);
-//         } else {
-//             executa_processo(corrente);
-//         }
-//         ciclo_atual++;
-//     }
-//     destroi_lista(processos);    
-// }
+void sjf(char* arquivo) {
+    int n_processos = 0, ciclo_atual = 0;
+    lista* processos = carrega_dados_lista(arquivo, 0, &n_processos);
+    fila fila_de_execucao;
+    proc* processo_ciclo_atual = NULL;
+    
+    // Inicializa a fila de execução de processos
+    cria_fila(&fila_de_execucao);
+    
+    while(n_processos > 0){        
+        encontra_processo_ciclo(&fila_de_execucao, &processos, ciclo_atual);
+        executa_processo(&fila_de_execucao, &n_processos);
+        ciclo_atual++;
+    }    
+    
+    destroi_lista(processos);
+    destroi_fila(&fila_de_execucao);
+}
 lista* carrega_dados_lista(char* arquivo, int circular, int *n_processos){
     int chegada, duracao;
     char id;

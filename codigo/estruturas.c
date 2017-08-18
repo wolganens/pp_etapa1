@@ -86,7 +86,7 @@ void destroi_lista(lista* lista_ptr) {
 	lista* aux = NULL;
 	while(lista_ptr != NULL) {		
 		aux = lista_ptr;
-		lista_ptr = lista_ptr->proximo;		
+		lista_ptr = lista_ptr->proximo;			
 		free(aux);
 	}
 }
