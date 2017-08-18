@@ -54,7 +54,7 @@ var escalonador = {
 			}
 		});
 		document.getElementById('final').addEventListener('click', function(){
-			_this.ciclo_atual = _this.execucao.length;
+			_this.ciclo_atual = _this.execucao.length - 1;
 		});
 		document.getElementById('reseta').addEventListener('click', function(){
 			_this.ciclo_atual = 0;
