@@ -40,6 +40,11 @@ void finaliza_logs(){
     fclose(log_html);
 }
 void salva_log_execucao(proc* processo){
-    fprintf(log_texto, "%c%d ", processo->id, processo->ciclos);
-    fprintf(log_html, "%c%d ", processo->id, processo->ciclos);
+    if(processo->id == '-') {
+        fprintf(log_texto, "%c ", processo->id);
+        fprintf(log_html, "%c ", processo->id);
+    } else {
+        fprintf(log_texto, "%c%d ", processo->id, processo->ciclos);
+        fprintf(log_html, "%c%d ", processo->id, processo->ciclos);
+    }
 }

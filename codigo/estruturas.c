@@ -8,13 +8,13 @@ void cria_fila(fila* f){
 	f->fim = NULL;
 }
 void encontra_processo_ciclo(fila* fila_ptr, lista** processos, int ciclo_atual){
-	lista* aux = *processos;
+	lista* aux = *processos;	
 	while(aux != NULL) {
-		if(aux->processo->chegada == ciclo_atual){
+		if(aux->processo->chegada == ciclo_atual){			
 			insere_fila(fila_ptr, aux->processo);
 		}
 		aux = aux->proximo;
-	}
+	}	
 }
 void remove_fila(fila* fila_ptr){	
 	if(fila_ptr->inicio != NULL){
