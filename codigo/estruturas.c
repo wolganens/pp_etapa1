@@ -20,8 +20,13 @@ void remove_fila(fila* fila_ptr){
 	if(fila_ptr->inicio != NULL){
 		no* inicio = fila_ptr->inicio;
 		if (inicio->proximo != NULL) {
-			fila_ptr->inicio = inicio->proximo;
+			fila_ptr->inicio = inicio->proximo;			
 			free(inicio);
+			inicio = NULL;
+		}
+		if(inicio == fila_ptr->fim) {
+			free(fila_ptr->fim);
+			fila_ptr->fim = NULL;
 		}
 	}
 }
@@ -35,7 +40,7 @@ void insere_fila(fila* fila_ptr, proc* processo) {
 	} else {
 		fila_ptr->inicio = novo;
 	}
-	fila_ptr->fim = novo;
+	fila_ptr->fim = novo;	
 }
 void destroi_fila(fila* fila_ptr) {
 	no* aux = fila_ptr->inicio;
