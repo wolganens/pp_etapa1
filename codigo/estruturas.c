@@ -1,62 +1,152 @@
 #include "estruturas.h"
-
 lista* cria_lista(){
-	return NULL;	
+	return NULL;
 }
 void cria_fila(fila* f){
 	f->inicio = NULL;
 	f->fim = NULL;
 }
 void encontra_processo_ciclo(fila* fila_ptr, lista** processos, int ciclo_atual){
-	lista* aux = *processos;	
+	lista* aux = *processos;
 	while(aux != NULL) {
-		if(aux->processo->chegada == ciclo_atual){			
+		if(aux->processo->chegada == ciclo_atual){
 			insere_fila(fila_ptr, aux->processo);
 		}
 		aux = aux->proximo;
-	}	
-}
-void remove_fila(fila* fila_ptr){	
-	if(fila_ptr->inicio != NULL){
-		no* inicio = fila_ptr->inicio;
-		if (inicio->proximo != NULL) {
-			fila_ptr->inicio = inicio->proximo;			
-			free(inicio);
-			inicio = NULL;
-		}
-		if(inicio == fila_ptr->fim) {
-			free(fila_ptr->fim);
-			fila_ptr->fim = NULL;
-		}
 	}
 }
 void insere_fila(fila* fila_ptr, proc* processo) {
-	no* novo = malloc(sizeof(fila));
+	no* novo = malloc(sizeof(no));
 	novo->processo = processo;
 	novo->proximo = NULL;
-
 	if(fila_ptr->fim != NULL){
 		fila_ptr->fim->proximo = novo;
 	} else {
 		fila_ptr->inicio = novo;
 	}
-	fila_ptr->fim = novo;	
+	fila_ptr->fim = novo;
+}
+void encontra_processo_sjf(lista** execucao, lista** processos, int ciclo_atual){
+	lista* aux = *processos;
+	while(aux != NULL) {
+		if(aux->processo->chegada == ciclo_atual){
+			insere_ordenado_duracao(execucao, aux->processo);
+		}
+		aux = aux->proximo;
+	}
+}
+void remove_fila(fila* fila_ptr){
+	if(fila_ptr->inicio != NULL){
+		no* inicio = fila_ptr->inicio;
+		if (inicio->proximo != NULL) {
+			fila_ptr->inicio = inicio->proximo;			
+			free(inicio);			
+		}
+		if(inicio == fila_ptr->fim) {			
+			free(fila_ptr->fim);
+			fila_ptr->inicio = NULL;
+			fila_ptr->fim = NULL;	
+		}
+	}
+}
+void remove_lista_inicio(lista** lista_ptr) {
+	if (*lista_ptr != NULL) {
+		lista* aux = *lista_ptr;
+
+		if ((*lista_ptr)->proximo != NULL) {
+			(*lista_ptr) = aux->proximo;
+		} else {
+			*lista_ptr = NULL;
+		}
+		free(aux);
+	}	
+}
+void insere_inicio_fila(fila* fila_ptr, proc* processo) {
+	no* novo = malloc(sizeof(no));
+	novo->processo = processo;
+	novo->proximo = NULL;
+	if(fila_ptr->inicio != NULL){
+		no* aux = fila_ptr->inicio;
+		novo->proximo = aux;
+	} else {
+		fila_ptr->fim = novo;
+	}
+	fila_ptr->inicio = novo;
 }
 void destroi_fila(fila* fila_ptr) {
 	no* aux = fila_ptr->inicio;
 	no* prox;
 	while(aux != NULL) {
-		prox = aux->proximo;
-		free(aux->processo);
+		prox = aux->proximo;		
 		free(aux);
 		aux = prox;
-	}		
+	}
 }
-void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duracao){	
+void insere_ordenado_duracao(lista **lista_ptr, proc* processo){
 	lista** percorrer = lista_ptr;
 	lista* anterior = NULL;
 	lista* aux = *lista_ptr;
-	lista* novo = novo_processo(id, chegada, duracao);
+	
+	lista* novo = malloc(sizeof(lista));
+	novo->proximo = NULL;
+	if(novo == NULL) {
+		printf("Falha ao alocar memória para novo nó da lista\n");
+		exit(1);
+	}	
+	novo->processo = processo;	
+	// Se a lista estivar vazia, o lemento novo é o começo da lista
+	if (*lista_ptr == NULL) {
+		*lista_ptr = novo;
+	} else {
+		// Percorre a lista até encontrar a posição do novo processo
+		while((*percorrer) != NULL && (*percorrer)->processo->duracao < novo->processo->duracao){
+			anterior = *percorrer;
+			*percorrer = (*percorrer)->proximo;
+		}
+		// Se não ouver nenhum anterior é porque o novo processo tem duracao menor que o primeiro
+		// elemento e deve ser inserido no inicio da lista
+		if (anterior == NULL) {
+			aux = *percorrer;
+			novo->proximo = aux;
+			*lista_ptr = novo;
+		} else {
+			// Se chegou no final da lista, ou seja o novo processo chegou por último
+			// apenas insere ele no final
+			if (*percorrer == NULL) {
+				anterior->proximo = novo;
+			} else {
+				// Caso contrário, insere o novo processo no meio da lista na posição adequada
+				anterior->proximo = novo;
+				novo->proximo = *percorrer;
+			}
+			//Mantem o começo da lista apontando para o primeiro elemento (aux);
+			*lista_ptr = aux;
+		}
+	}
+}
+void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duracao){
+	lista** percorrer = lista_ptr;
+	lista* anterior = NULL;
+	lista* aux = *lista_ptr;
+	
+	lista* novo = malloc(sizeof(lista));
+	novo->proximo = NULL;
+	if(novo == NULL) {
+		printf("Falha ao alocar memória para novo nó da lista\n");
+		exit(1);
+	}
+	
+	proc* novo_processo = malloc(sizeof(proc));
+	if (novo_processo == NULL) {
+		printf("Falha ao alocar memória para o processo\n");
+		exit(1);
+	}
+	novo_processo->id = id;
+	novo_processo->chegada = chegada;
+	novo_processo->duracao = duracao;
+	novo_processo->ciclos = 0;
+	
+	novo->processo = novo_processo;	
 	// Se a lista estivar vazia, o lemento novo é o começo da lista
 	if (*lista_ptr == NULL) {
 		*lista_ptr = novo;
@@ -87,21 +177,23 @@ void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duraca
 		}
 	}
 }
-void destroi_lista(lista* lista_ptr) {
-	lista* aux = NULL;
-	while(lista_ptr != NULL) {		
-		aux = lista_ptr;
-		lista_ptr = lista_ptr->proximo;			
+void destroi_lista(lista* lista_ptr) {	
+	lista* aux = lista_ptr;
+	lista* prox = NULL;
+	while(aux != NULL) {
+		prox = aux->proximo;		
+		free(aux->processo);
 		free(aux);
+		aux = prox;
 	}
 }
 // int vazia(proc** lista){
 // 	return *lista == NULL;
 // }
-// void remove_pelo_id(proc** lista, char id){	
+// void remove_pelo_id(proc** lista, char id){
 // 	proc** percorrer = lista;
 // 	proc* anterior = NULL;
-// 	proc* aux = *lista;		
+// 	proc* aux = *lista;
 // 	if (!*lista) {
 // 		printf("Lista vazia\n");
 // 		exit(1);
@@ -114,14 +206,14 @@ void destroi_lista(lista* lista_ptr) {
 // 		// Se não ouver nenhum anterior é porque o novo processo tem chegada menor que o primeiro
 // 		// elemento e deve ser inserido no inicio da lista
 // 		if (anterior == NULL) {
-// 			aux = *percorrer;			
+// 			aux = *percorrer;
 // 			*lista = aux->proximo;
 // 		} else {
 // 			if (*percorrer == NULL) {
 // 				printf("Não encontrado\n");
 // 				exit(1);
 // 			} else {
-// 				anterior->proximo = (*percorrer)->proximo;				
+// 				anterior->proximo = (*percorrer)->proximo;
 // 			}
 // 			*lista = aux;
 // 		}
@@ -135,45 +227,26 @@ void destroi_lista(lista* lista_ptr) {
 // 	proc **percorrer = lista;
 // 	proc *aux = *lista;
 // 	proc *menor = *lista;
-// 	while(*percorrer != NULL) {		
+// 	while(*percorrer != NULL) {
 // 		if((*percorrer)->duracao < menor->duracao) {
 // 			menor = (*percorrer);
 // 		}
-// 		*percorrer = (*percorrer)->proximo;		
+// 		*percorrer = (*percorrer)->proximo;
 // 	}
 // 	*lista = aux;
 // 	return menor;
 // }
 // void destroi_lista_circular(proc** lista) {
 // 	proc* aux = (*lista);
-// 	proc* remover;	
-// 	while (aux->proximo != (*lista)) {		
-// 		aux = aux->proximo;		
+// 	proc* remover;
+// 	while (aux->proximo != (*lista)) {
+// 		aux = aux->proximo;
 // 	}
 // 	free(aux);
 // }
-lista* novo_processo(char id, int chegada, int duracao){
-	lista* no_lista = malloc(sizeof(lista));
-	if(no_lista == NULL) {
-		printf("Falha ao alocar memória para novo nó da lista\n");
-		exit(1);
-	}
-	proc* novo = malloc(sizeof(proc));
-	if (novo == NULL) {
-		printf("Falha ao alocar memória para o processo\n");
-		exit(1);
-	}
-	novo->id = id;
-	novo->chegada = chegada;
-	novo->duracao = duracao;
-	novo->ciclos = 0;	
-	
-	no_lista->proximo = NULL;
-	no_lista->processo = novo;
-	
-	return no_lista;
+lista* novo_processo(char id, int chegada, int duracao){	
 }
-// void insere_ordenado_chegada_circular(proc **lista, char id, int chegada, int duracao){	
+// void insere_ordenado_chegada_circular(proc **lista, char id, int chegada, int duracao){
 // 	proc* novo = novo_processo(id, chegada, duracao);
 // 	proc* anterior = NULL;
 // 	if ((*lista) == NULL) {
@@ -192,22 +265,22 @@ lista* novo_processo(char id, int chegada, int duracao){
 // 			} else {
 // 				(*lista) = novo;
 // 				novo->proximo = aux;
-// 				aux->proximo = novo;				
+// 				aux->proximo = novo;
 // 			}
 // 		} else {
 // 			aux->proximo = novo;
 // 			novo->proximo = (*lista);
 // 		}
-// 	}	
+// 	}
 // }
 // int restam_processos(proc** lista) {
 // 	int restam = 0;
 // 	proc* inicio = *lista;
-// 	proc** percorrer = lista;			
+// 	proc** percorrer = lista;
 // 	while(*percorrer != NULL && (*percorrer)->proximo != inicio) {
 // 		if ((*percorrer)->duracao > 0) {
 // 			restam = 1;
-// 		}		
+// 		}
 // 		*percorrer = (*percorrer)->proximo;
 // 	}
 // 	*lista = inicio;
@@ -216,8 +289,7 @@ lista* novo_processo(char id, int chegada, int duracao){
 // proc* busca_processo_ciclo(proc** processos, int ciclo_atual) {
 // 	proc** percorrer = processos;
 // 	proc* inicio = *processos;
-// 	proc* processo = NULL;	
-
+// 	proc* processo = NULL;
 // 	while(*percorrer != NULL) {
 // 		if ((*percorrer)->chegada == ciclo_atual) {
 // 			if (processo != NULL) {
@@ -225,7 +297,7 @@ lista* novo_processo(char id, int chegada, int duracao){
 // 					processo = (*percorrer);
 // 				} else {
 // 					*percorrer = (*percorrer)->proximo;
-// 					continue;			
+// 					continue;
 // 				}
 // 			}
 // 			processo = (*percorrer);
@@ -234,7 +306,7 @@ lista* novo_processo(char id, int chegada, int duracao){
 // 	}
 // 	if (processo == NULL) {
 // 		processo = inicio;
-// 		*percorrer = inicio->proximo;		
+// 		*percorrer = inicio->proximo;
 // 		while(*percorrer != NULL) {
 // 			if ((*percorrer)->duracao < processo->duracao) {
 // 				processo = *percorrer;
@@ -271,9 +343,9 @@ lista* novo_processo(char id, int chegada, int duracao){
 // 		aux->proximo = inserir;
 // 	}
 // }
-// void pop(proc** inicio) {	
+// void pop(proc** inicio) {
 // 	proc* aux = *inicio;
-// 	*inicio = aux->proximo;	
+// 	*inicio = aux->proximo;
 // 	free(aux);
 // }
 // proc* cria_fila() {
