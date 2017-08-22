@@ -2,22 +2,17 @@
 #include "estruturas.c"
 #include "politicas.h"
 #include "logs.c"
-
 int n_processos = 0, ciclo_atual = 0;
-
 void executa_politica(char* politica, char *arquivo, int quantum) {
     inicializa_logs(politica);
     lista* processos = carrega_dados_lista(arquivo, 0);
-
     if (strcmp("fcfs", politica) == 0) {
         fcfs(processos);
-    }
-    else if(strcmp("sjf", politica) == 0) {
+    } else if(strcmp("sjf", politica) == 0) {
         sjf(processos);
+    } else if(strcmp("rr", politica) == 0){
+        rr(processos, quantum);
     }
-    // } else if(strcmp("rr", politica) == 0){
-    //     rr(arquivo, quantum);
-    // }
     finaliza_logs();
 }
 void executa_processo(proc* processo) {
@@ -49,13 +44,13 @@ void fcfs(lista* processos) {
 }
 void sjf(lista* processos){
     lista *execucao = cria_lista();
-    // Inicializa a fila de execução de processos    
+    // Inicializa a fila de execução de processos
     while(n_processos > 0){
-        encontra_processo_sjf(&execucao, &processos, ciclo_atual);        
-        if (execucao != NULL) {            
-            executa_processo(execucao->processo);                        
-            if(execucao->processo->duracao == 0){                
-                remove_lista_inicio(&execucao);                
+        encontra_processo_sjf(&execucao, &processos, ciclo_atual);
+        if (execucao != NULL) {
+            executa_processo(execucao->processo);
+            if(execucao->processo->duracao == 0){
+                remove_lista_inicio(&execucao);
                 n_processos--;
             }
         } else {
@@ -65,28 +60,23 @@ void sjf(lista* processos){
     }
     destroi_lista(processos);
 }
-// void rr(char* arquivo, int quantum) {
-//     proc* processos = carrega_dados_lista(arquivo, 1);
-//     proc* corrente = processos;
-//     int i;
-//     while(restam_processos(&processos)) {
-//         if(corrente->duracao >= quantum) {
-//             for (i = 0 ; i < quantum ; i++) {
-//                 executa_processo(corrente);
-//             }
-//         }else {
-//             if (corrente->duracao == 0) {
-//                 remove_pelo_id(&processos, corrente->id);
-//             } else {
-//                 while(corrente->duracao > 0){
-//                     executa_processo(corrente);
-//                 }
-//             }
-//         }
-//         corrente = corrente->proximo;
-//     }
-//     destroi_lista_circular(&processos);
-// }
+void rr(lista* processos, int quantum){
+    lista *execucao = cria_lista();
+    while(n_processos > 0){
+        encontra_processo_rr(&execucao, &processos, ciclo_atual);        
+        if (execucao != NULL) {        		    	
+            executa_processo(execucao->processo);
+            if(execucao->processo->duracao == 0){            	
+                remove_lista_circular_inicio(&execucao);                
+                n_processos--;
+            }	        
+        } else {
+            executa_processo(NULL);
+        }
+        ciclo_atual++;
+    }
+    destroi_lista(processos);
+}
 lista* carrega_dados_lista(char* arquivo, int circular){
     int chegada, duracao, i;
     char id;
