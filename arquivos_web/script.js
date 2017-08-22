@@ -1,11 +1,14 @@
 var escalonador = {
-	processos: {},
+	processos: {'-': {
+		cor: 'rgba(218, 223, 225)',
+		duracao: 1
+	}},
 	execucao:[],
 	divs:[],
 	ciclo_atual: 0,
 	setProcessos: function (){
 		this.execucao = processos = document.getElementById('processos').textContent.split(" ").filter(v=>v!='');
-		var i, n, digit = /\d/g, letter = /[A-Z]/g, proccesso, id, index;
+		var i, n, digit = /\d/g, letter = /[A-Z]|\-/g, proccesso, id, index;
 		for (i = 0, n = processos.length ; i < n ; i++) {
 			id = processos[i].match(letter)[0];
 			if (!this.processos.hasOwnProperty(id)){
@@ -16,7 +19,7 @@ var escalonador = {
 		}
 	},
 	setDivs(){
-		var i,n, digit = /\d/g, letter = /[A-Z]/g, div;
+		var i,n, digit = /\d/g, letter = /[A-Z]|\-/g, div;
 		for ( i = 0, n = this.execucao.length ; i < n ; i++){
 			div = document.createElement('div');			
 			div.style.background = this.processos[this.execucao[i].match(letter)[0]].cor;
@@ -29,7 +32,7 @@ var escalonador = {
 	},
 	exibe_ciclo_atual: function(){		
 		if (this.ciclo_atual == 0) {
-			this.processos[this.execucao[this.ciclo_atual].match(/[A-Z]/g)[0]].duracao--;
+			this.processos[this.execucao[this.ciclo_atual].match(/[A-Z]|\-/g)[0]].duracao--;
 		}
 		for (i = 0, n = this.divs.length ; i < n ; i++) {
 			if (i <= escalonador.ciclo_atual) {
@@ -44,12 +47,12 @@ var escalonador = {
 		document.getElementById('avanca').addEventListener('click', function(){
 			if (_this.ciclo_atual < _this.execucao.length - 1){
 				_this.ciclo_atual++;
-				_this.processos[_this.execucao[_this.ciclo_atual].match(/[A-Z]/g)[0]].duracao--;
+				_this.processos[_this.execucao[_this.ciclo_atual].match(/[A-Z]|\-/g)[0]].duracao--;
 			}
 		});
 		document.getElementById('volta').addEventListener('click', function(){
 			if(_this.ciclo_atual > 0) {
-				_this.processos[_this.execucao[_this.ciclo_atual].match(/[A-Z]/g)[0]].duracao++;
+				_this.processos[_this.execucao[_this.ciclo_atual].match(/[A-Z]|\-/g)[0]].duracao++;
 				_this.ciclo_atual--;
 			}
 		});
@@ -87,7 +90,7 @@ escalonador.init();
 // 	setProcessos: function(){
 // 		var i;
 // 		for (i = 0 ; i < processos.length; i++){
-// 			var regex_processo = /[A-Z]/;
+// 			var regex_processo = /[A-Z]|\-/;
 // 			var regex_ciclo = /\d/;
 // 			escalonador.ciclos.push(
 // 				processos[i]
@@ -101,7 +104,7 @@ escalonador.init();
 // 	divs:[],
 // 	setDivs: function(){
 // 		var i;
-// 		var regex_processo = /[A-Z]/;
+// 		var regex_processo = /[A-Z]|\-/;
 // 		for(i = 0 ; i < escalonador.ciclos.length; i++){
 // 			escalonador.divs.push(
 // 				'<div class="ciclo hidden col-xs-2 col-lg-1" style="background:' + escalonador.colors[escalonador.proc.indexOf(escalonador.ciclos[i].match(regex_processo)[0])] + '">'+ escalonador.ciclos[i] +'</div>'

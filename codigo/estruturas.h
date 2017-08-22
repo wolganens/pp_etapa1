@@ -44,4 +44,5 @@ lista* cria_lista();
 void insere_final(fila** fila_ptr, proc* processo);
 void destroi_lista(lista* lista_ptr);
 void remove_lista_inicio(lista** lista_ptr);
+void envia_final_lista(lista** lista_ptr);
 

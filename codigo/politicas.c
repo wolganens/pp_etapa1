@@ -62,14 +62,19 @@ void sjf(lista* processos){
 }
 void rr(lista* processos, int quantum){
     lista *execucao = cria_lista();
-    while(n_processos > 0){
+    while(n_processos > 0){    	
         encontra_processo_rr(&execucao, &processos, ciclo_atual);        
-        if (execucao != NULL) {        		    	
+        if (execucao != NULL) {
+        	if (execucao->processo->controle == quantum) {
+        		execucao->processo->controle = 0;
+        		execucao = execucao->proximo;
+        	}
             executa_processo(execucao->processo);
-            if(execucao->processo->duracao == 0){            	
-                remove_lista_circular_inicio(&execucao);                
+            execucao->processo->controle+=1;
+            if(execucao->processo->duracao == 0){
+                remove_lista_circular_inicio(&execucao);
                 n_processos--;
-            }	        
+            }
         } else {
             executa_processo(NULL);
         }

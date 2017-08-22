@@ -19,11 +19,6 @@ void encontra_processo_rr(lista** execucao, lista** processos, int ciclo_atual) 
 	lista* aux = *processos;
 	while(aux != NULL) {
 		if(aux->processo->chegada == ciclo_atual){
-			printf("Vou inserir o %c, chegada: %d\n", aux->processo->id, aux->processo->chegada);
-			if ((*execucao) != NULL) {
-				printf("Atualmente o inicio da lista é: %c\n", (*execucao)->processo->id);
-			}
-			getchar();
 			insere_ordenado_chegada_circular(execucao, aux->processo);
 		}
 		aux = aux->proximo;
@@ -53,27 +48,60 @@ void remove_fila(fila* fila_ptr){
 	if(fila_ptr->inicio != NULL){
 		no* inicio = fila_ptr->inicio;
 		if (inicio->proximo != NULL) {
-			fila_ptr->inicio = inicio->proximo;			
-			free(inicio);			
+			fila_ptr->inicio = inicio->proximo;
+			free(inicio);
 		}
-		if(inicio == fila_ptr->fim) {			
+		if(inicio == fila_ptr->fim) {
 			free(fila_ptr->fim);
 			fila_ptr->inicio = NULL;
-			fila_ptr->fim = NULL;	
+			fila_ptr->fim = NULL;
+		}
+	}
+}
+void envia_final_lista(lista** lista_ptr) {
+	if(*lista_ptr != NULL) {
+		if (*lista_ptr != (*lista_ptr)->proximo) {
+			lista* aux = *lista_ptr;
+			while (aux->proximo != *lista_ptr) {
+				aux = aux->proximo;
+			}
 		}
 	}
 }
 void remove_lista_inicio(lista** lista_ptr) {
 	if (*lista_ptr != NULL) {
 		lista* aux = *lista_ptr;
-
 		if ((*lista_ptr)->proximo != NULL) {
 			(*lista_ptr) = aux->proximo;
 		} else {
 			*lista_ptr = NULL;
 		}
 		free(aux);
-	}	
+	}
+}
+void remove_lista_circular_id(lista** lista_ptr, char id){
+	printf("remover: %c\n", id);
+	if ((*lista_ptr) != NULL) {
+		if (*lista_ptr == (*lista_ptr)->proximo) {
+			free(*lista_ptr);
+			*lista_ptr = NULL;
+		} else {
+			lista* aux = *lista_ptr;
+			lista* anterior = NULL;
+			while (aux->processo->id != id) {
+				printf("aqui\n");
+				anterior = aux;
+				aux = aux->proximo;
+			}
+			if(anterior == NULL) {
+				printf("inicio da lista %c\n", (*lista_ptr)->proximo->processo->id);
+				printf("aux: %c\n", aux->processo->id);
+				getchar();
+			}
+			anterior->proximo = aux->proximo;
+			free(aux);
+		}
+	}
 }
 void remove_lista_circular_inicio(lista** lista_ptr) {
 	if (*lista_ptr != NULL) {
@@ -90,7 +118,7 @@ void remove_lista_circular_inicio(lista** lista_ptr) {
 			free(inicio);
 			aux->proximo = *lista_ptr;
 		}
-	}	
+	}
 }
 void insere_inicio_fila(fila* fila_ptr, proc* processo) {
 	no* novo = malloc(sizeof(no));
@@ -108,7 +136,7 @@ void destroi_fila(fila* fila_ptr) {
 	no* aux = fila_ptr->inicio;
 	no* prox;
 	while(aux != NULL) {
-		prox = aux->proximo;		
+		prox = aux->proximo;
 		free(aux);
 		aux = prox;
 	}
@@ -117,14 +145,13 @@ void insere_ordenado_duracao(lista **lista_ptr, proc* processo){
 	lista** percorrer = lista_ptr;
 	lista* anterior = NULL;
 	lista* aux = *lista_ptr;
-	
 	lista* novo = malloc(sizeof(lista));
 	novo->proximo = NULL;
 	if(novo == NULL) {
 		printf("Falha ao alocar memória para novo nó da lista\n");
 		exit(1);
-	}	
-	novo->processo = processo;	
+	}
+	novo->processo = processo;
 	// Se a lista estivar vazia, o lemento novo é o começo da lista
 	if (*lista_ptr == NULL) {
 		*lista_ptr = novo;
@@ -159,14 +186,12 @@ void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duraca
 	lista** percorrer = lista_ptr;
 	lista* anterior = NULL;
 	lista* aux = *lista_ptr;
-	
 	lista* novo = malloc(sizeof(lista));
 	novo->proximo = NULL;
 	if(novo == NULL) {
 		printf("Falha ao alocar memória para novo nó da lista\n");
 		exit(1);
 	}
-	
 	proc* novo_processo = malloc(sizeof(proc));
 	if (novo_processo == NULL) {
 		printf("Falha ao alocar memória para o processo\n");
@@ -177,8 +202,7 @@ void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duraca
 	novo_processo->duracao = duracao;
 	novo_processo->ciclos = 0;
 	novo_processo->controle = 0;
-	
-	novo->processo = novo_processo;	
+	novo->processo = novo_processo;
 	// Se a lista estivar vazia, o lemento novo é o começo da lista
 	if (*lista_ptr == NULL) {
 		*lista_ptr = novo;
@@ -209,11 +233,11 @@ void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duraca
 		}
 	}
 }
-void destroi_lista(lista* lista_ptr) {	
+void destroi_lista(lista* lista_ptr) {
 	lista* aux = lista_ptr;
 	lista* prox = NULL;
 	while(aux != NULL) {
-		prox = aux->proximo;		
+		prox = aux->proximo;
 		free(aux->processo);
 		free(aux);
 		aux = prox;
@@ -234,8 +258,8 @@ void insere_ordenado_chegada_circular(lista** execucao, proc* processo){
  			anterior = aux;
  			aux = aux->proximo;
  		}
- 		if (anterior == NULL) { 			
- 			if (novo->processo->chegada > aux->processo->chegada) { 				
+ 		if (anterior == NULL) {
+ 			if (novo->processo->chegada > aux->processo->chegada) {
  				aux->proximo = novo;
  				novo->proximo = aux;
  			} else {
@@ -243,9 +267,9 @@ void insere_ordenado_chegada_circular(lista** execucao, proc* processo){
  				novo->proximo = aux;
  				aux->proximo = novo;
  			}
- 		} else { 			
+ 		} else {
  			novo->proximo = aux->proximo;
- 			aux->proximo = novo; 			
+ 			aux->proximo = novo;
  		}
  	}
 }
