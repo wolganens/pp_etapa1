@@ -12,7 +12,7 @@ var escalonador = {
 		for (i = 0, n = processos.length ; i < n ; i++) {
 			id = processos[i].match(letter)[0];
 			if (!this.processos.hasOwnProperty(id)){
-				this.processos[id] = {duracao: 1, cor: randomColor({luminosity: 'light'})}
+				this.processos[id] = {duracao: 1, cor: randomColor({luminosity: 'light', seed: (i % new Date().getTime())})}
 			} else {
 				this.processos[id].duracao++;
 			}
