@@ -19,13 +19,21 @@ var escalonador = {
 		}
 	},
 	setDivs(){
-		var i,n, digit = /\d/g, letter = /[A-Z]|\-/g, div;
+		var i,n, digit = /\d/g, letter = /[A-Z]|\-/g, div, div_ciclo, div_exec;
 		for ( i = 0, n = this.execucao.length ; i < n ; i++){
 			div = document.createElement('div');			
 			div.style.background = this.processos[this.execucao[i].match(letter)[0]].cor;
-			div.style.display = 'none';
-			div.textContent = this.execucao[i];
-			div.classList.add('col-xs-2', 'col-lg-1', 'ciclo');
+			div.style.display = 'none';			
+			div.classList.add('ciclo');
+			div.classList.add('col-xs-2', 'col-lg-1');
+			div_exec = document.createElement('div');
+			div_exec.textContent = this.execucao[i];
+			div.appendChild(div_exec);
+			div_ciclo = document.createElement('div');
+			div_ciclo.textContent = i;
+			div_ciclo.style.fontSize = '10px';			
+			div_ciclo.style.background = 'white';
+			div.appendChild(div_ciclo);
 			document.getElementById('execucao').appendChild(div);
 			this.divs.push(div);
 		}
