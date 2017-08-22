@@ -3,9 +3,9 @@
 #include "politicas.h"
 #include "logs.c"
 int n_processos = 0, ciclo_atual = 0;
-void executa_politica(char* politica, char *arquivo, int quantum) {
+void executa_politica(char* politica, char *arquivo, unsigned int quantum) {
     inicializa_logs(politica);
-    lista* processos = carrega_dados_lista(arquivo, 0);
+    lista* processos = carrega_dados_lista(arquivo);
     if (strcmp("fcfs", politica) == 0) {
         fcfs(processos);
     } else if(strcmp("sjf", politica) == 0) {
@@ -60,7 +60,7 @@ void sjf(lista* processos){
     }
     destroi_lista(processos);
 }
-void rr(lista* processos, int quantum){
+void rr(lista* processos, unsigned int quantum){
     lista *execucao = cria_lista();
     while(n_processos > 0){    	
         encontra_processo_rr(&execucao, &processos, ciclo_atual);        
@@ -82,8 +82,8 @@ void rr(lista* processos, int quantum){
     }
     destroi_lista(processos);
 }
-lista* carrega_dados_lista(char* arquivo, int circular){
-    int chegada, duracao, i;
+lista* carrega_dados_lista(char* arquivo){
+    int chegada, duracao;
     char id;
     lista *processos = cria_lista();
     FILE* entrada = fopen(arquivo, "r");
@@ -94,12 +94,7 @@ lista* carrega_dados_lista(char* arquivo, int circular){
     do{
         fscanf(entrada, "%c %d %d\n", &id, &chegada, &duracao);
         insere_ordenado_chegada(&processos,id,chegada,duracao);
-        n_processos++;
-        // if(circular) {
-        //     insere_ordenado_chegada_circular(&processos,id,chegada,duracao);
-        // } else {
-        //     insere_ordenado_chegada(&processos,id,chegada,duracao);
-        // }
+        n_processos++;        
     }while(!feof(entrada));
     fclose(entrada);
     return processos;
