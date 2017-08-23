@@ -8,9 +8,9 @@ var escalonador = {
 	ciclo_atual: 0,
 	setProcessos: function (){
 		this.execucao = processos = document.getElementById('processos').textContent.split(" ").filter(v=>v!='');
-		var i, n, digit = /\d/g, letter = /[A-Z]|\-/g, proccesso, id, index;
+		var i, n, digit = /\d/g, letter = /\d+/, proccesso, id, index;
 		for (i = 0, n = processos.length ; i < n ; i++) {
-			id = processos[i].match(letter)[0];
+			id = processos[i].match(letter);
 			if (!this.processos.hasOwnProperty(id)){
 				this.processos[id] = {duracao: 1, cor: randomColor({luminosity: 'light', seed: (i % new Date().getTime())})}
 			} else {
@@ -19,10 +19,10 @@ var escalonador = {
 		}
 	},
 	setDivs(){
-		var i,n, digit = /\d/g, letter = /[A-Z]|\-/g, div, div_ciclo, div_exec;
+		var i,n, digit = /\d/g, letter = /\d+/, div, div_ciclo, div_exec;
 		for ( i = 0, n = this.execucao.length ; i < n ; i++){
 			div = document.createElement('div');			
-			div.style.background = this.processos[this.execucao[i].match(letter)[0]].cor;
+			div.style.background = this.processos[this.execucao[i].match(letter)].cor;
 			div.style.display = 'none';			
 			div.classList.add('ciclo');
 			div.classList.add('col-xs-2', 'col-lg-1');
@@ -40,7 +40,7 @@ var escalonador = {
 	},
 	exibe_ciclo_atual: function(){		
 		if (this.ciclo_atual == 0) {
-			this.processos[this.execucao[this.ciclo_atual].match(/[A-Z]|\-/g)[0]].duracao--;
+			this.processos[this.execucao[this.ciclo_atual].match(/\d|\-/g)[0]].duracao--;
 		}
 		for (i = 0, n = this.divs.length ; i < n ; i++) {
 			if (i <= escalonador.ciclo_atual) {
@@ -55,12 +55,12 @@ var escalonador = {
 		document.getElementById('avanca').addEventListener('click', function(){
 			if (_this.ciclo_atual < _this.execucao.length - 1){
 				_this.ciclo_atual++;
-				_this.processos[_this.execucao[_this.ciclo_atual].match(/[A-Z]|\-/g)[0]].duracao--;
+				_this.processos[_this.execucao[_this.ciclo_atual].match(/\d|\-/g)[0]].duracao--;
 			}
 		});
 		document.getElementById('volta').addEventListener('click', function(){
 			if(_this.ciclo_atual > 0) {
-				_this.processos[_this.execucao[_this.ciclo_atual].match(/[A-Z]|\-/g)[0]].duracao++;
+				_this.processos[_this.execucao[_this.ciclo_atual].match(/\d|\-/g)[0]].duracao++;
 				_this.ciclo_atual--;
 			}
 		});

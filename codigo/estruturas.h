@@ -1,5 +1,5 @@
 struct processo{
-	char id;
+	unsigned int id;
 	int chegada,duracao,ciclos;
 	unsigned int controle;
 };
@@ -26,7 +26,7 @@ struct processos
 };
 typedef struct processos lista;
 
-lista* novo_processo(char id, int chegada, int duracao);
+lista* novo_processo(unsigned int id, int chegada, int duracao);
 void cria_fila();
 void insere_fila(fila* fila_ptr, proc* processo);
 void insere_fila_ord_duracao(fila* fila_ptr, proc* processo);
@@ -35,7 +35,7 @@ void remove_fila(fila* fila_ptr);
 
 void encontra_processo_ciclo(fila* fila_ptr, lista** processos, int ciclo_atual);
 void encontra_processo_sjf(lista** execucao, lista** processos, int ciclo_atual);
-void insere_ordenado_chegada(lista **lista, char id, int chegada, int duracao);
+void insere_ordenado_chegada(lista **lista_ptr, unsigned int id, int chegada, int duracao);
 void insere_ordenado_duracao(lista **lista_ptr, proc* processo);
 void insere_ordenado_chegada_circular(lista** execucao, proc* processo);
 

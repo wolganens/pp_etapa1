@@ -84,7 +84,7 @@ void rr(lista* processos, unsigned int quantum){
 }
 lista* carrega_dados_lista(char* arquivo){
     int chegada, duracao;
-    char id;
+    unsigned int id;
     lista *processos = cria_lista();
     FILE* entrada = fopen(arquivo, "r");
     if (entrada == NULL) {
@@ -92,7 +92,7 @@ lista* carrega_dados_lista(char* arquivo){
         exit(1);
     }
     do{
-        fscanf(entrada, "%c %d %d\n", &id, &chegada, &duracao);
+        fscanf(entrada, "%u %d %d\n", &id, &chegada, &duracao);
         insere_ordenado_chegada(&processos,id,chegada,duracao);
         n_processos++;        
     }while(!feof(entrada));

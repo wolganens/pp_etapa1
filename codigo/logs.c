@@ -53,7 +53,7 @@ void salva_log_execucao(proc* processo){
         fprintf(log_texto, "- ");
         fprintf(log_html, "- ");
     } else {
-        fprintf(log_texto, "%c%d ", processo->id, processo->ciclos);
-        fprintf(log_html, "%c%d ", processo->id, processo->ciclos);
+        fprintf(log_texto, "%u-%d ", processo->id, processo->ciclos);
+        fprintf(log_html, "%u-%d ", processo->id, processo->ciclos);
     }
 }

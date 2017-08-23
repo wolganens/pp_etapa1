@@ -127,7 +127,7 @@ void insere_ordenado_duracao(lista **lista_ptr, proc* processo){
 		}
 	}
 }
-void insere_ordenado_chegada(lista **lista_ptr, char id, int chegada, int duracao){
+void insere_ordenado_chegada(lista **lista_ptr, unsigned int id, int chegada, int duracao){
 	lista** percorrer = lista_ptr;
 	lista* anterior = NULL;
 	lista* aux = *lista_ptr;
